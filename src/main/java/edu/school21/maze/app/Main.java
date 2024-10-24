@@ -15,8 +15,8 @@ import edu.school21.maze.model.Maze;
 
 public class Main {
     public static void main(String[] args) {
-        Maze maze = new Maze(4,4);
+        Maze maze = new Maze(5,5);
         MazeGenerator mazeGenerator = new MazeGenerator(maze);
-        mazeGenerator.generateRandomNumber();
+        mazeGenerator.mazeGeneration();
     }
 }

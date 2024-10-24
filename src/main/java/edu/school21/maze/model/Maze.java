@@ -1,17 +1,20 @@
 package edu.school21.maze.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Maze {
     private final int NumberOfCols;
     private final int NumberOfRows;
 
-    private List<List<Integer>> bottomWall;
-    private List<List<Integer>> rightWall;
+    private List<Integer> bottomWall;
+    private List<Integer> rightWall;
 
     public Maze(int numberOfCols, int numberOfRows) {
         NumberOfCols = numberOfCols;
         NumberOfRows = numberOfRows;
+        bottomWall = new ArrayList<>();
+        rightWall = new ArrayList<>();
     }
 
     public int getNumberOfCols() {
@@ -24,18 +27,18 @@ public class Maze {
     }
 
 
-    public List<List<Integer>> getBottomWall() {
+    public List<Integer> getBottomWall() {
         return bottomWall;
     }
 
-    public List<List<Integer>> getRightWall() {
+    public List<Integer> getRightWall() {
         return rightWall;
     }
 
-    public void putRightWall(int row, Integer value){
-        rightWall.get(row).add(value);
+    public void putRightWall(Integer value){
+        rightWall.add(value);
     }
-    public void putBottomWall(int row, Integer value){
-        bottomWall.get(row).add(value);
+    public void putBottomWall(Integer value){
+        bottomWall.add(value);
     }
 }
