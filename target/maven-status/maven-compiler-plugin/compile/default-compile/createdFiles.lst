@@ -1,0 +1,6 @@
+edu/school21/maze/app/Main.class
+edu/school21/maze/model/Maze.class
+edu/school21/maze/model/SetCollection.class
+module-info.class
+edu/school21/maze/generation/MazeGenerator.class
+edu/school21/maze/model/LineOfSets.class

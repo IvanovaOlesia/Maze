@@ -41,4 +41,5 @@ public class Maze {
     public void putBottomWall(Integer value){
         bottomWall.add(value);
     }
+
 }

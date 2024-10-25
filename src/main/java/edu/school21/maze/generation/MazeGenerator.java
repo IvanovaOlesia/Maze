@@ -5,13 +5,11 @@ import edu.school21.maze.model.Maze;
 import edu.school21.maze.model.SetCollection;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class MazeGenerator {
     private Maze maze;
@@ -49,10 +47,15 @@ public class MazeGenerator {
         System.out.println(decisionArray);
         for (int i = 0; i < maze.getNumberOfRows(); i++) {
             fillingArrayWithNumbersInOrder(lineOfSets);
-            System.out.println(lineOfSets);
             placeWallOnTheRight(lineOfSets);
-            System.out.println(lineOfSets);
-            placeWallOnTheBottom(lineOfSets);
+            if (i == maze.getNumberOfRows() - 1){
+                for (int k = 0; k < lineOfSets.getLine().size(); k++){
+                    maze.putBottomWall(1);
+                    countBottomWall.get(lineOfSets.getLine().get(k)).setNumberOfBottomWallsInSet(countBottomWall.get(lineOfSets.getLine().get(k)).getNumberOfBottomWallsInSet() + 1);
+                }
+            }else{
+                placeWallOnTheBottom(lineOfSets);
+            }
             resetCellsWithBottomWalls(lineOfSets);
 
         }
@@ -60,11 +63,12 @@ public class MazeGenerator {
     }
 
     private void resetCellsWithBottomWalls(LineOfSets lineOfSets) {
-        for (int i = 0; i < lineOfSets.getIndexSetWithBottomWall().size(); i++) {
-            if (lineOfSets.getIndexSetWithBottomWall().get(i) != 0) {
-                lineOfSets.getLine().set(lineOfSets.getIndexSetWithBottomWall().get(i), 0);
-            }
+        for (Integer index : lineOfSets.getIndexSetWithBottomWall()){
+//            countBottomWall.get(lineOfSets.getLine().get(index)).setNumberOfCellsInSet(countBottomWall.get(lineOfSets.getLine().get(index)).getNumberOfCellsInSet() - 1);
+//            countBottomWall.get(lineOfSets.getLine().get(index)).setNumberOfBottomWallsInSet(countBottomWall.get(lineOfSets.getLine().get(index)).getNumberOfBottomWallsInSet() - 1);
+            lineOfSets.getLine().set(index, 0);
         }
+
     }
 
     private void placeWallOnTheRight(LineOfSets lineOfSets) {
@@ -73,20 +77,21 @@ public class MazeGenerator {
                 if ((i != lineOfSets.getLine().size() - 1) && (Objects.equals(lineOfSets.getLine().get(i), lineOfSets.getLine().get(i + 1)))) {
                     maze.putRightWall(1);
                 } else {
-                    maze.putRightWall(0);
                     if (i < lineOfSets.getLine().size() - 1) {
+                        maze.putRightWall(0);
                         Integer rightCell = lineOfSets.getLine().get(i+1);
                         lineOfSets.getLine().set(i+1, lineOfSets.getLine().get(i));
                         countBottomWall.get(lineOfSets.getLine().get(i)).setNumberOfCellsInSet(countBottomWall.get(lineOfSets.getLine().get(i)).getNumberOfCellsInSet() + 1);
+                        countBottomWall.get(rightCell).setNumberOfCellsInSet(countBottomWall.get(rightCell).getNumberOfCellsInSet() - 1);
                         for (int j = i + 1; j < lineOfSets.getLine().size(); j++) {
                             if (lineOfSets.getLine().get(j).equals(rightCell)) {
                                 lineOfSets.getLine().set(j, lineOfSets.getLine().get(i));
                                 countBottomWall.get(lineOfSets.getLine().get(i)).setNumberOfCellsInSet(countBottomWall.get(lineOfSets.getLine().get(i)).getNumberOfCellsInSet() + 1);
+                                countBottomWall.get(rightCell).setNumberOfCellsInSet(countBottomWall.get(rightCell).getNumberOfCellsInSet() - 1);
                             }
                         }
                     }else {
                         maze.putRightWall(1);
-                        countBottomWall.get(lineOfSets.getLine().get(i)).setNumberOfCellsInSet(countBottomWall.get(lineOfSets.getLine().get(i)).getNumberOfCellsInSet() + 1);
                     }
                 }
             } else {
@@ -102,6 +107,8 @@ public class MazeGenerator {
                     maze.putBottomWall(1);
                     countBottomWall.get(lineOfSets.getLine().get(i)).setNumberOfBottomWallsInSet(countBottomWall.get(lineOfSets.getLine().get(i)).getNumberOfBottomWallsInSet() + 1);
                     lineOfSets.getIndexSetWithBottomWall().add(i);
+                }else{
+                    maze.putBottomWall(0);
                 }
             } else {
                 maze.putBottomWall(0);
@@ -114,6 +121,9 @@ public class MazeGenerator {
             if (lineOfSets.getLine().get(i) == 0) {
                 lineOfSets.getLine().set(i, setFillCounter++);
             }
+        }
+        for (Integer set : lineOfSets.getLine()){
+            countBottomWall.get(set).setNumberOfCellsInSet(countBottomWall.get(set).getNumberOfCellsInSet() + 1);
         }
     }
 }
