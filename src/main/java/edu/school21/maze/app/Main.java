@@ -42,8 +42,8 @@ public class Main extends Application {
 
         MazeGenerator mazeGenerator = new MazeGenerator(maze);
         mazeGenerator.mazeGeneration();
-        System.out.println(maze.getBottomWall());
-        System.out.println(maze.getRightWall());
+//        System.out.println(maze.getBottomWall());
+//        System.out.println(maze.getRightWall());
 
         int cellWidth = (int) Math.floor((double) width / (maze.getNumberOfCols() + 1));
         int cellHeight = (int) Math.floor((double) height / (maze.getNumberOfRows() + 1));
