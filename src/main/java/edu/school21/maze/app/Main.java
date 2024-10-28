@@ -27,9 +27,7 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
-//        Maze maze = new Maze(4,4);
-//        MazeGenerator mazeGenerator = new MazeGenerator(maze);
-//        mazeGenerator.mazeGeneration();
+
 
 
         Application.launch();

@@ -21,6 +21,15 @@ public class LineOfSets {
     public List<Integer> getIndexSetWithBottomWall() {
         return indexSetWithBottomWall;
     }
+    public int getSize(){
+        return line.size();
+    }
+    public Integer getCellByIndex(int index){
+        return line.get(index);
+    }
+    public void setCellByIndex(int index, int value){
+        line.set(index, value);
+    }
 
     @Override
     public String toString() {
