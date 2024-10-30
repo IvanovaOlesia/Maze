@@ -27,9 +27,6 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
-
-
-
         Application.launch();
     }
 
@@ -38,12 +35,11 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         Canvas canvas = new Canvas(500, 500);
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        Maze maze = new Maze(4,4);
+        Maze maze = new Maze(10,10);
 
         MazeGenerator mazeGenerator = new MazeGenerator(maze);
         mazeGenerator.mazeGeneration();
-//        System.out.println(maze.getBottomWall());
-//        System.out.println(maze.getRightWall());
+
 
         int cellWidth = (int) Math.floor((double) width / (maze.getNumberOfCols() + 1));
         int cellHeight = (int) Math.floor((double) height / (maze.getNumberOfRows() + 1));
@@ -53,22 +49,12 @@ public class Main extends Application {
 
         for (int i = 0; i < maze.getNumberOfRows(); i++) {
             for (int j = 0; j < maze.getNumberOfCols(); j++) {
-
+                gc.setFill(Color.BLACK);
                 if (maze.getRightWall().get(i * maze.getNumberOfCols() + j) == 1) {
-                    gc.setFill(Color.BLACK);
-                    gc.fillRect((j + 1) * cellWidth - 1, i * cellWidth + 1, 2, cellHeight);
-                }else {
-                    gc.setFill(Color.WHITE);
-                    gc.fillRect((j + 1) * cellWidth - 1, i * cellWidth + 1, 2, cellHeight);
-
+                    gc.fillRect((j + 1)  * cellWidth - 2, i * cellHeight, 2, cellHeight);
                 }
                 if (maze.getBottomWall().get(i * maze.getNumberOfCols() + j) == 1) {
-                    gc.setFill(Color.BLACK);
-                    gc.fillRect(j * cellWidth + 1, (i + 1) * cellWidth - 1, cellWidth, 2);
-                }else {
-                    gc.setFill(Color.WHITE);
-                    gc.fillRect(j * cellWidth + 1, (i + 1) * cellWidth - 1, cellWidth, 2);
-
+                    gc.fillRect(j * cellWidth, (i + 1)  * cellHeight - 2 , cellWidth , 2);
                 }
             }
         }

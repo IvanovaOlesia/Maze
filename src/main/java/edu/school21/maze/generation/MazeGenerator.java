@@ -28,7 +28,6 @@ public class MazeGenerator {
 
     public void mazeGeneration() {
         generateRandomNumber();
-//        decisionArray = new ArrayList<>(Arrays.asList(0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1));
         for (int i = 0; i < maze.getNumberOfRows(); i++) {
             assignSetsToArrayCells(lineOfSets);
             placeWallOnTheRight(lineOfSets);
@@ -49,12 +48,11 @@ public class MazeGenerator {
      */
     public void generateRandomNumber() {
         decisionArray = IntStream.generate(() -> ThreadLocalRandom.current().nextInt(2))
-                .limit(maze.getNumberOfCols() * maze.getNumberOfRows() * 3L)
+                .limit(maze.getNumberOfCols() * maze.getNumberOfRows() * 2L)
                 .boxed()
                 .toList();
     }
     private void assignSetsToArrayCells(LineOfSets lineOfSets) {
-
         IntStream.range(0, maze.getNumberOfCols())
                 .filter(i -> lineOfSets.getLine().get(i) == 0)
                 .forEach(i -> lineOfSets.getLine().set(i, setFillCounter++));
