@@ -50,10 +50,10 @@ public class Main extends Application {
         for (int i = 0; i < maze.getNumberOfRows(); i++) {
             for (int j = 0; j < maze.getNumberOfCols(); j++) {
                 gc.setFill(Color.BLACK);
-                if (maze.getRightWall().get(i * maze.getNumberOfCols() + j) == 1) {
+                if (maze.getVerticalWall().get(i * maze.getNumberOfCols() + j) == 1) {
                     gc.fillRect((j + 1)  * cellWidth - 2, i * cellHeight, 2, cellHeight);
                 }
-                if (maze.getBottomWall().get(i * maze.getNumberOfCols() + j) == 1) {
+                if (maze.getHorizontalWall().get(i * maze.getNumberOfCols() + j) == 1) {
                     gc.fillRect(j * cellWidth, (i + 1)  * cellHeight - 2 , cellWidth , 2);
                 }
             }

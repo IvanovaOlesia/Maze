@@ -7,14 +7,14 @@ public class Maze {
     private final int NumberOfCols;
     private final int NumberOfRows;
 
-    private List<Integer> bottomWall;
-    private List<Integer> rightWall;
+    private List<Integer> horizontalWall;
+    private List<Integer> verticalWall;
 
     public Maze(int numberOfCols, int numberOfRows) {
         NumberOfCols = numberOfCols;
         NumberOfRows = numberOfRows;
-        bottomWall = new ArrayList<>();
-        rightWall = new ArrayList<>();
+        horizontalWall = new ArrayList<>();
+        verticalWall = new ArrayList<>();
     }
 
     public int getNumberOfCols() {
@@ -27,19 +27,19 @@ public class Maze {
     }
 
 
-    public List<Integer> getBottomWall() {
-        return bottomWall;
+    public List<Integer> getHorizontalWall() {
+        return horizontalWall;
     }
 
-    public List<Integer> getRightWall() {
-        return rightWall;
+    public List<Integer> getVerticalWall() {
+        return verticalWall;
     }
 
-    public void putRightWall(Integer value){
-        rightWall.add(value);
+    public void putVerticalWall(Integer value){
+        verticalWall.add(value);
     }
-    public void putBottomWall(Integer value){
-        bottomWall.add(value);
+    public void putHorizontalWall(Integer value){
+        horizontalWall.add(value);
     }
 
 }
