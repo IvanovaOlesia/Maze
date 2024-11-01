@@ -131,7 +131,7 @@ public class MazeGenerator {
     private void placeWallOnTheHorizontal(LineOfSets lineOfSets) {
         for (int i = 0; i < lineOfSets.getSize(); i++) {
             if (decisionArray.get(indexDecisionArray++) == 1) {
-                if (setService.getNumberOfCellsWithoutHorizontalWall(lineOfSets.getLine().get(i)) > 1) {
+                if (setService.getNumberOfCellsWithoutHorizontalWall(lineOfSets.getCellByIndex(i)) > 1) {
                     maze.putHorizontalWall(1);
                     setService.incrementNumberOfHorizontalWallInSet(lineOfSets.getCellByIndex(i));
                     lineOfSets.getIndexSetWithHorizontalWall().add(i);

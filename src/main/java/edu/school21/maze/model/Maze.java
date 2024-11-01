@@ -4,26 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Maze {
-    private final int NumberOfCols;
-    private final int NumberOfRows;
+    private final int numberOfCols;
+    private final int numberOfRows;
 
     private List<Integer> horizontalWall;
     private List<Integer> verticalWall;
 
-    public Maze(int numberOfCols, int numberOfRows) {
-        NumberOfCols = numberOfCols;
-        NumberOfRows = numberOfRows;
+    public Maze(int numberOfRows, int numberOfCols) {
+        this.numberOfCols = numberOfCols;
+        this.numberOfRows = numberOfRows;
         horizontalWall = new ArrayList<>();
         verticalWall = new ArrayList<>();
     }
 
     public int getNumberOfCols() {
-        return NumberOfCols;
+        return numberOfCols;
     }
 
 
     public int getNumberOfRows() {
-        return NumberOfRows;
+        return numberOfRows;
     }
 
 

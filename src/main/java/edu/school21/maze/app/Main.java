@@ -10,6 +10,7 @@
 
 package edu.school21.maze.app;
 
+import edu.school21.maze.file.MazeReader;
 import edu.school21.maze.generation.MazeGenerator;
 import edu.school21.maze.model.Maze;
 import javafx.application.Application;
@@ -35,14 +36,16 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         Canvas canvas = new Canvas(500, 500);
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        Maze maze = new Maze(10,10);
+        MazeReader mazeReader = new MazeReader();
+        Maze maze = mazeReader.readFile();
+//        Maze maze = new Maze(10,10);
 
         MazeGenerator mazeGenerator = new MazeGenerator(maze);
         mazeGenerator.mazeGeneration();
 
 
-        int cellWidth = (int) Math.floor((double) width / (maze.getNumberOfCols() + 1));
-        int cellHeight = (int) Math.floor((double) height / (maze.getNumberOfRows() + 1));
+        int cellWidth = (int) Math.floor((double) width / maze.getNumberOfCols());
+        int cellHeight = (int) Math.floor((double) height / maze.getNumberOfRows());
 
 
 
