@@ -22,10 +22,10 @@ public class MazeGenerator {
     public MazeGenerator(Maze maze) {
         this.maze = maze;
         decisionArray = new ArrayList<>();
+//        decisionArray = new ArrayList<>(Arrays.asList(0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1));
         setService = new SetService();
         setFillCounter = 1;
         indexDecisionArray = 0;
-        //lineOfSets = new LineOfSets(maze.getNumberOfCols());
         lineService = new LineService(maze.getNumberOfCols());
     }
 
@@ -59,22 +59,28 @@ public class MazeGenerator {
                 .forEach(i -> lineService.setCellSet(i, setFillCounter++));
         incrementCellCount();
     }
-
-
-    private void lastLineProcessing() {
+    private void verticalWallPlacement() {
         for (int i = 0; i < lineService.getSize(); i++) {
-            maze.putHorizontalWall(1);
-            if ((i != lineService.getSize() - 1) && (!lineService.compareSets(i, i + 1))) {
-                maze.getVerticalWall().set((maze.getNumberOfRows() - 1) * maze.getNumberOfCols() + i, 0);
-                Integer currentSet = lineService.getCellByIndex(i);
-                for (int j = 0; j < lineService.getSize(); j++) {
-                    if (lineService.compareSets(j, i + 1)) {
-                        lineService.setCellByIndex(j, currentSet);
-                    }
+            if (decisionArray.get(indexDecisionArray++) == 0) {
+                if (i < lineService.getSize() - 1) {
+                    processingDecisionNotToPlaceVerticalWall(i);
+                } else {
+                    maze.putVerticalWall(1);
                 }
+            } else {
+                maze.putVerticalWall(1);
             }
         }
     }
+    private void processingDecisionNotToPlaceVerticalWall(int index) {
+        if (compareWithRightCell(index)) {
+            maze.putVerticalWall(1);
+        } else {
+            equateSets(index);
+        }
+    }
+
+
 
     private void resetSetData() {
         for (Integer index : lineService.getLine()) {
@@ -90,27 +96,23 @@ public class MazeGenerator {
         lineService.getIndexSetWithHorizontalWall().clear();
     }
 
-    private void verticalWallPlacement() {
+
+    private void lastLineProcessing() {
         for (int i = 0; i < lineService.getSize(); i++) {
-            if (decisionArray.get(indexDecisionArray++) == 0) {
-                if (i < lineService.getSize() - 1) {
-                    processingDecisionNotToPlaceVerticalWall(i);
-                } else {
-                    maze.putVerticalWall(1);
+            maze.putHorizontalWall(1);
+            if ((i != lineService.getSize() - 1) && (!lineService.compareSets(i, lineService.getCellByIndex(i + 1)))) {
+                maze.getVerticalWall().set((maze.getNumberOfRows() - 1) * maze.getNumberOfCols() + i, 0);
+                Integer rightSet = lineService.getCellByIndex(i + 1);
+                Integer currentSet = lineService.getCellByIndex(i);
+                for (int j = 0; j < lineService.getSize(); j++) {
+                    if (lineService.compareSets(j, rightSet)) {
+                        lineService.setCellByIndex(j, currentSet);
+                    }
                 }
-            } else {
-                maze.putVerticalWall(1);
             }
         }
     }
 
-    private void processingDecisionNotToPlaceVerticalWall(int index) {
-        if (compareWithRightCell(index)) {
-            maze.putVerticalWall(1);
-        } else {
-            equateSets(index);
-        }
-    }
 
     private void equateSets(int index) {
         maze.putVerticalWall(0);
@@ -132,19 +134,21 @@ public class MazeGenerator {
     private void placeWallOnTheHorizontal() {
         for (int i = 0; i < lineService.getSize(); i++) {
             if (decisionArray.get(indexDecisionArray++) == 1) {
-                if (setService.getNumberOfCellsWithoutHorizontalWall(lineService.getCellByIndex(i)) > 1) {
-                    maze.putHorizontalWall(1);
-                    setService.incrementNumberOfHorizontalWallInSet(lineService.getCellByIndex(i));
-                    lineService.addIndexSetWithHorizontalWall(i);
-                } else {
-                    maze.putHorizontalWall(0);
-                }
+                processingDecisionToPlaceHorizontalWall(i);
             } else {
                 maze.putHorizontalWall(0);
             }
         }
     }
-
+   private void processingDecisionToPlaceHorizontalWall(int index){
+       if (setService.getNumberOfCellsWithoutHorizontalWall(lineService.getCellByIndex(index)) > 1) {
+           maze.putHorizontalWall(1);
+           setService.incrementNumberOfHorizontalWallInSet(lineService.getCellByIndex(index));
+           lineService.addIndexSetWithHorizontalWall(index);
+       } else {
+           maze.putHorizontalWall(0);
+       }
+    }
     private void incrementCellCount() {
         for (Integer set : lineService.getLine()) {
             if (setService.containsSet(set)) {

@@ -41,7 +41,7 @@ public class LineService {
         lineOfSets.getIndexSetWithHorizontalWall().add(index);
     }
 
-    public boolean compareSets(int indexOne, int indexTwo) {
-        return lineOfSets.getLine().get(indexOne).equals(lineOfSets.getLine().get(indexTwo));
+    public boolean compareSets(int indexOne, int set) {
+        return lineOfSets.getLine().get(indexOne).equals(set);
     }
 }

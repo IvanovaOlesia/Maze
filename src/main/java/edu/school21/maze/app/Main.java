@@ -37,8 +37,8 @@ public class Main extends Application {
         Canvas canvas = new Canvas(500, 500);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         MazeReader mazeReader = new MazeReader();
-        Maze maze = mazeReader.readFile();
-//        Maze maze = new Maze(10,10);
+//        Maze maze = mazeReader.readFile();
+        Maze maze = new Maze(7,7);
 
         MazeGenerator mazeGenerator = new MazeGenerator(maze);
         mazeGenerator.mazeGeneration();
