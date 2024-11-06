@@ -9,7 +9,6 @@ public class MazeReader {
 
 
     public Maze readFile() {
-
         try {
             InputStream inputStream = getClass().getResourceAsStream("/maze.txt");
             BufferedReader reader = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream)));

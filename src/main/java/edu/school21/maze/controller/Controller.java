@@ -3,6 +3,7 @@ package edu.school21.maze.controller;
 import edu.school21.maze.generation.MazeGenerator;
 import edu.school21.maze.model.Maze;
 import edu.school21.maze.view.MazeCanvas;
+import edu.school21.maze.waveAlgoritm.WaveAlgorithm;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
@@ -22,6 +23,7 @@ public class Controller {
         Maze maze = new Maze(rows, cols);
         MazeGenerator mazeGenerator = new MazeGenerator(maze);
         mazeGenerator.mazeGeneration();
+        WaveAlgorithm waveAlgorithm = new WaveAlgorithm(maze);
         mazeCanvas.drawMaze(maze);
     }
 }

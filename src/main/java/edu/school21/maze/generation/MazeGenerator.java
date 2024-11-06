@@ -10,7 +10,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
 
 public class MazeGenerator {
-    private final Maze maze;
     private int setFillCounter;
     private List<Integer> decisionArray;
     private int indexDecisionArray;
