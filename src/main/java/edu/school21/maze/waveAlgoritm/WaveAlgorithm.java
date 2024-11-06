@@ -9,19 +9,15 @@ import java.util.List;
 
 public class WaveAlgorithm {
     private final Maze maze;
-    private static List<Point> stepsForEnemies;
-    private static Point stepForEnemies;
-
-    public static List<Point> getStepsForEnemies() {
-        return stepsForEnemies;
-    }
-
-    public static Point getStepForEnemies() {
-        return stepForEnemies;
-    }
+    private int step;
+    private List<List<Integer>> mazeSolution;
+    private List<Integer> cloneVerticalWall;
+    private List<Integer> cloneHorizontalWall;
 
     public WaveAlgorithm(Maze maze) {
         this.maze = maze;
+        this.step = 1;
+        this.mazeSolution = initializeSolutionArray();
     }
 
     private static final List<Point> clockwiseWalk = new ArrayList<>(Arrays.asList(
@@ -35,83 +31,81 @@ public class WaveAlgorithm {
         return clockwiseWalk;
     }
 
-    public void  findPath(int startX, int startY, int finishX, int finishY) {
+    public void findPath(int startX, int startY, int finishX, int finishY) {
         startWave(startX, startY, finishX, finishY);
+        getPath(startX, startY, finishX, finishY);
+        for (var value: mazeSolution) {
+            System.out.println(value);
+        }
     }
 
-    public void  startWave(int startX, int startY, int finishX, int finishY) {
-        List<Point> wave = new ArrayList<>();
+    public void startWave(int startX, int startY, int finishX, int finishY) {
+        List<Point> wave ;
         List<Point> oldWave = new ArrayList<>();
-        List<List<Integer>> mazeSolution = initializeSolutionArray();
-        int step = 0;
         oldWave.add(new Point(startX, startY));
+        mazeSolution.get(startY).set(startX, 1);
         while (!oldWave.isEmpty()) {
             step++;
-            wave.clear();
+            wave = new ArrayList<>();
             for (Point cell : oldWave) {
-                    rightStepCheck(cell,wave, finishX, finishY);
-                    leftStepCheck(cell,wave, finishX, finishY);
-                    upStepCheck(cell,wave, finishX, finishY);
-                    downStepCheck(cell,wave, finishX, finishY);
-//                    int newX = cell.getX() + clockwiseWalk.get(i).getX();
-//                    int newY = cell.getY() + clockwiseWalk.get(i).getY();
-//                    if ((newX < maze.getNumberOfCols()) &&
-//                            (newY < maze.getNumberOfRows()) &&
-//                            (newX >= 0) &&
-//                            (newY >= 0) &&
-//                            ((copyGameField.get(newX).get(newY) == emptyChar || copyGameField.get(newX).get(newY) == playerChar))) {
-//                        copyGameField.get(newX).set(newY, step);
-//                        wave.add(new Point(newX, newY));
-//                    }
-
+                stepRight(cell, wave, finishX, finishY);
+                stepLeft(cell, wave, finishX, finishY);
+                stepUp(cell, wave, finishX, finishY);
+                stepDown(cell, wave, finishX, finishY);
             }
-            oldWave = new ArrayList<>(wave);
+            oldWave = new ArrayList<>();
+            for (var value : wave){
+                oldWave.add(new Point(value.getX(), value.getY()));
+            }
         }
-        return getPath(copyGameField, placePlay, placeGoal, playerChar);
     }
 
-    private void downStepCheck(Point cell, List<Point> wave, int finishX, int finishY) {
+    private void stepDown(Point cell, List<Point> wave, int finishX, int finishY) {
         int newX = cell.getX() + clockwiseWalk.get(1).getX();
         int newY = cell.getY() + clockwiseWalk.get(1).getY();
-        if (boundaryCheck(newX, newY) && (checkingForHorizontalWall(cell.getY(),cell.getX()) || gotToTheEnd(newX, newY, finishX, finishY))){
+        if (boundaryCheck(newX, newY) && (mazeSolution.get(newY).get(newX) == 0) && (checkingForHorizontalWall(cell.getY(), cell.getX()) || gotToTheEnd(newX, newY, finishX, finishY))) {
+            mazeSolution.get(newY).set(newX, step);
             wave.add(new Point(newX, newY));
         }
     }
 
 
-
-    private void upStepCheck(Point cell, List<Point> wave, int finishX, int finishY) {
+    private void stepUp(Point cell, List<Point> wave, int finishX, int finishY) {
         int newX = cell.getX() + clockwiseWalk.get(3).getX();
         int newY = cell.getY() + clockwiseWalk.get(3).getY();
-        if (boundaryCheck(newX, newY) && (checkingForHorizontalWall(newY, newX) || gotToTheEnd(newX, newY, finishX, finishY))){
+        if (boundaryCheck(newX, newY) && (mazeSolution.get(newY).get(newX) == 0) && (checkingForHorizontalWall(newY, newX) || gotToTheEnd(newX, newY, finishX, finishY))) {
+            mazeSolution.get(newY).set(newX, step);
             wave.add(new Point(newX, newY));
         }
     }
 
-    private void leftStepCheck(Point cell, List<Point> wave, int finishX, int finishY) {
+    private void stepLeft(Point cell, List<Point> wave, int finishX, int finishY) {
         int newX = cell.getX() + clockwiseWalk.get(0).getX();
         int newY = cell.getY() + clockwiseWalk.get(0).getY();
-        if (boundaryCheck(newX, newY) && checkingForVerticalWall(newY, newX) || gotToTheEnd(newX, newY, finishX, finishY)){
+        if (boundaryCheck(newX, newY) && (mazeSolution.get(newY).get(newX) == 0) && (checkingForVerticalWall(newY, newX) || gotToTheEnd(newX, newY, finishX, finishY))) {
+            mazeSolution.get(newY).set(newX, step);
             wave.add(new Point(newX, newY));
         }
     }
 
 
-
-    private void rightStepCheck(Point cell, List<Point> wave, int finishX, int finishY) {
+    private void stepRight(Point cell, List<Point> wave, int finishX, int finishY) {
         int newX = cell.getX() + clockwiseWalk.get(2).getX();
         int newY = cell.getY() + clockwiseWalk.get(2).getY();
-        if (boundaryCheck(newX, newY) && checkingForVerticalWall(cell.getY(), cell.getX()) || gotToTheEnd(newX, newY, finishX, finishY)){
+        if (boundaryCheck(newX, newY)  && (mazeSolution.get(newY).get(newX) == 0) && (checkingForVerticalWall(cell.getY(), cell.getX()) || gotToTheEnd(newX, newY, finishX, finishY))) {
+            mazeSolution.get(newY).set(newX, step);
             wave.add(new Point(newX, newY));
         }
     }
-    private boolean gotToTheEnd(int newX, int newY,  int finishX, int finishY) {
+
+    private boolean gotToTheEnd(int newX, int newY, int finishX, int finishY) {
         return (newX == finishX) && (newY == finishY);
     }
 
     private boolean checkingForHorizontalWall(int y, int x) {
         return maze.getHorizontalWall().get(y * maze.getNumberOfCols() + x) == 0;
     }
+
     private boolean checkingForVerticalWall(int y, int x) {
         return maze.getVerticalWall().get(y * maze.getNumberOfCols() + x) == 0;
     }
@@ -120,45 +114,26 @@ public class WaveAlgorithm {
         return (newX < maze.getNumberOfCols()) && (newY < maze.getNumberOfRows()) && (newX >= 0) && (newY >= 0);
     }
 
-    public static boolean getPath(ArrayList<ArrayList<Integer>> copyGameField, Point placePlay, Point placeGoal, int playerChar) {
-        if (copyGameField.get(placePlay.x).get(placePlay.y) == playerChar) {
-            return false;
-        }
-        stepsForEnemies = new ArrayList<>();
-        stepForEnemies = new Point();
-        copyGameField.get(placeGoal.x).set(placeGoal.y, 0);
-
-        Point bypass = new Point();
-        bypass.x = placePlay.x;
-        bypass.y = placePlay.y;
-
-        while (!bypass.equals(placeGoal)) {
+    public void getPath(int startX, int startY, int finishX, int finishY) {
+        Point currentWave = new Point(finishX, finishY);
+        Point goal = new Point(startX, startY);
+        while (!currentWave.equals(goal)) {
             for (int i = 0, flag = 0; i < 4 && flag == 0; i++) {
-                int newX = bypass.x + clockwiseWalk.get(i).x;
-                int newY = bypass.y + clockwiseWalk.get(i).y;
-                if ((newX < copyGameField.size()) &&
-                        (newY < copyGameField.size()) &&
-                        (newX >= 0) &&
-                        (newY >= 0) && (copyGameField.get(bypass.x).get(bypass.y) - 1 == copyGameField.get(newX).get(newY))) {
-                    bypass.x = newX;
-                    bypass.y = newY;
+                int newX = currentWave.getX() + clockwiseWalk.get(i).getX();
+                int newY = currentWave.getY() + clockwiseWalk.get(i).getY();
+                if (boundaryCheck(newX, newY) && (mazeSolution.get(currentWave.getY()).get(currentWave.getX()) - 1 == mazeSolution.get(newY).get(newX))) {
+                    mazeSolution.get(currentWave.getY()).set(currentWave.getX(), 0);
+                    currentWave.setX(newX);
+                    currentWave.setY(newY);
                     flag = 1;
-                    if (!bypass.equals(placeGoal)) {
-                        stepForEnemies.x = newX;
-                        stepForEnemies.y = newY;
-                        stepsForEnemies.add(new Point(newX, newY));
-                    }
                 }
             }
-
         }
-        return true;
-
     }
 
-    private List<List<Integer>>initializeSolutionArray() {
+    private List<List<Integer>> initializeSolutionArray() {
         List<List<Integer>> mazeSolution = new ArrayList<>();
-        for (int  i = 0; i < maze.getNumberOfRows(); i++) {
+        for (int i = 0; i < maze.getNumberOfRows(); i++) {
             mazeSolution.add(new ArrayList<>());
             for (int j = 0; j < maze.getNumberOfCols(); j++) {
                 mazeSolution.get(i).add(0);
@@ -166,5 +141,7 @@ public class WaveAlgorithm {
         }
         return mazeSolution;
     }
+
+
 
 }

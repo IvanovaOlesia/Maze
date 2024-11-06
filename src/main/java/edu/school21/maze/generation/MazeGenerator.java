@@ -16,6 +16,7 @@ public class MazeGenerator {
     private final SetService setService;
 
     private final LineService lineService;
+    private final Maze maze;
 
 
     public MazeGenerator(Maze maze) {
