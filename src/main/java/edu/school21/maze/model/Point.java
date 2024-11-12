@@ -1,4 +1,4 @@
-package edu.school21.maze.waveAlgoritm;
+package edu.school21.maze.model;
 
 import java.util.Objects;
 

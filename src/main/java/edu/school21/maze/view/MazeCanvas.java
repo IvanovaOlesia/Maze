@@ -1,6 +1,7 @@
 package edu.school21.maze.view;
 
 import edu.school21.maze.model.Maze;
+import edu.school21.maze.model.Solution;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -15,13 +16,13 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class MazeCanvas extends Canvas {
-    private final int CANVAS_WIDTH = 500;
-    private final int CANVAS_HEIGHT = 500;
-
+    public static final int CANVAS_WIDTH = 500;
+    public static final int CANVAS_HEIGHT = 500;
     private int cellWidth;
     private int cellHeight;
-
     private Scene scene;
+    private GraphicsContext gc;
+    private Maze maze;
 
 
     public Scene getMazeScene() {
@@ -38,14 +39,15 @@ public class MazeCanvas extends Canvas {
 
     public MazeCanvas() {
         super(500, 500);
+        gc = this.getGraphicsContext2D();
     }
 
     public void drawMaze(Maze maze) {
-        GraphicsContext gc = this.getGraphicsContext2D();
+        this.maze = maze;
         gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-        cellWidth = (int) Math.floor((double) CANVAS_WIDTH / maze.getNumberOfCols());
-        cellHeight = (int) Math.floor((double) CANVAS_HEIGHT / maze.getNumberOfRows());
+        cellWidth = CANVAS_WIDTH / maze.getNumberOfCols();
+        cellHeight = CANVAS_HEIGHT / maze.getNumberOfRows();
 
         for (int i = 0; i < maze.getNumberOfRows(); i++) {
             for (int j = 0; j < maze.getNumberOfCols(); j++) {
@@ -57,6 +59,20 @@ public class MazeCanvas extends Canvas {
                     gc.fillRect(j * cellWidth, (i + 1) * cellHeight - 2, cellWidth, 2);
                 }
             }
+        }
+    }
+
+    public void drawSolution(Solution solution){
+        gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        drawMaze(maze);
+        gc.setStroke(Color.GREEN);
+        gc.setLineWidth(2);
+        for (int i = 0; i < solution.getSolutionArray().size() - 1; i++) {
+            int startX = solution.getSolutionArray().get(i).getX();
+            int startY = solution.getSolutionArray().get(i).getY();
+            int finishX = solution.getSolutionArray().get(i + 1).getX();
+            int finishY = solution.getSolutionArray().get(i + 1).getY();
+            gc.strokeLine(startX, startY, finishX, finishY);
         }
     }
 

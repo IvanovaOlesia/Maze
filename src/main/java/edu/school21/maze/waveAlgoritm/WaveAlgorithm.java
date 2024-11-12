@@ -2,6 +2,8 @@ package edu.school21.maze.waveAlgoritm;
 
 
 import edu.school21.maze.model.Maze;
+import edu.school21.maze.model.Point;
+import edu.school21.maze.model.Solution;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,9 +14,11 @@ public class WaveAlgorithm {
     private int step;
     private final List<List<Integer>> mazeSolution;
     private boolean isStep;
+    private final Solution solution;
 
-    public WaveAlgorithm(Maze maze) {
+    public WaveAlgorithm(Maze maze, Solution solution) {
         this.maze = maze;
+        this.solution = solution;
         this.step = 1;
         this.mazeSolution = initializeSolutionArray();
     }
@@ -27,13 +31,9 @@ public class WaveAlgorithm {
     ));
 
 
-    public void findPath(int startX, int startY, int finishX, int finishY) {
-        startWave(startX, startY);
-        getPath(startX, startY, finishX, finishY);
-        for (var value : mazeSolution) {
-            System.out.println(value);
-        }
-        System.out.println();
+    public void findPath() {
+        startWave(solution.getStart().getX(), solution.getStart().getY());
+        getPath(solution.getStart().getX(), solution.getStart().getY(), solution.getFinish().getX(), solution.getFinish().getY());
     }
 
     public void startWave(int startX, int startY) {
@@ -50,11 +50,6 @@ public class WaveAlgorithm {
                 oldWave.add(new Point(value.getX(), value.getY()));
             }
         }
-        for (var value : mazeSolution) {
-            System.out.println(value);
-        }
-        System.out.println();
-
     }
 
     private void goingAroundInCircle(List<Point> wave, List<Point> oldWave) {
@@ -126,27 +121,29 @@ public class WaveAlgorithm {
             up(currentWave);
             down(currentWave);
         }
+        solution.addSolutionStep(new Point(goal.getX(), goal.getY()));
     }
 
     private void down(Point currentWave) {
         int newX = currentWave.getX() + clockwiseWalk.get(1).getX();
         int newY = currentWave.getY() + clockwiseWalk.get(1).getY();
         if (isStep && boundaryCheck(newX, newY) && (mazeSolution.get(currentWave.getY()).get(currentWave.getX()) - 1 == mazeSolution.get(newY).get(newX)) && (checkingForHorizontalWall(currentWave.getY(), currentWave.getX()))) {
-            mazeSolution.get(currentWave.getY()).set(currentWave.getX(), 0);
-            currentWave.setX(newX);
-            currentWave.setY(newY);
-            isStep = false;
+            addSolutionCoordinates(currentWave, newX, newY);
         }
+    }
+
+    private void addSolutionCoordinates(Point currentWave, int newX, int newY) {
+        solution.addSolutionStep(new Point(currentWave.getX(), currentWave.getY()));
+        currentWave.setX(newX);
+        currentWave.setY(newY);
+        isStep = false;
     }
 
     private void up(Point currentWave) {
         int newX = currentWave.getX() + clockwiseWalk.get(3).getX();
         int newY = currentWave.getY() + clockwiseWalk.get(3).getY();
         if (isStep && boundaryCheck(newX, newY) && (mazeSolution.get(currentWave.getY()).get(currentWave.getX()) - 1 == mazeSolution.get(newY).get(newX)) && (checkingForHorizontalWall(newY, newX))) {
-            mazeSolution.get(currentWave.getY()).set(currentWave.getX(), 0);
-            currentWave.setX(newX);
-            currentWave.setY(newY);
-            isStep = false;
+            addSolutionCoordinates(currentWave, newX, newY);
         }
 
     }
@@ -155,10 +152,7 @@ public class WaveAlgorithm {
         int newX = currentWave.getX() + clockwiseWalk.get(0).getX();
         int newY = currentWave.getY() + clockwiseWalk.get(0).getY();
         if (isStep && boundaryCheck(newX, newY) && (mazeSolution.get(currentWave.getY()).get(currentWave.getX()) - 1 == mazeSolution.get(newY).get(newX)) && (checkingForVerticalWall(newY, newX))) {
-            mazeSolution.get(currentWave.getY()).set(currentWave.getX(), 0);
-            currentWave.setX(newX);
-            currentWave.setY(newY);
-            isStep = false;
+            addSolutionCoordinates(currentWave, newX, newY);
         }
     }
 
@@ -166,10 +160,7 @@ public class WaveAlgorithm {
         int newX = currentWave.getX() + clockwiseWalk.get(2).getX();
         int newY = currentWave.getY() + clockwiseWalk.get(2).getY();
         if (isStep && boundaryCheck(newX, newY) && (mazeSolution.get(currentWave.getY()).get(currentWave.getX()) - 1 == mazeSolution.get(newY).get(newX)) && (checkingForVerticalWall(currentWave.getY(), currentWave.getX()))) {
-            mazeSolution.get(currentWave.getY()).set(currentWave.getX(), 0);
-            currentWave.setX(newX);
-            currentWave.setY(newY);
-            isStep = false;
+            addSolutionCoordinates(currentWave, newX, newY);
         }
     }
 
@@ -183,6 +174,4 @@ public class WaveAlgorithm {
         }
         return mazeSolution;
     }
-
-
 }
