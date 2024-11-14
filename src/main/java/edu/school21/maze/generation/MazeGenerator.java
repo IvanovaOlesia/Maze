@@ -22,7 +22,6 @@ public class MazeGenerator {
     public MazeGenerator(Maze maze) {
         this.maze = maze;
         decisionArray = new ArrayList<>();
-//        decisionArray = new ArrayList<>(Arrays.asList(0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1));
         setService = new SetService();
         setFillCounter = 1;
         indexDecisionArray = 0;
