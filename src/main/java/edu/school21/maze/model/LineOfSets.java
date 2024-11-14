@@ -31,11 +31,4 @@ public class LineOfSets {
         line.set(index, value);
     }
 
-    @Override
-    public String toString() {
-        return "LineOfSets{" +
-                "line=" + line +
-                ", indexSetWithBottomWall=" + indexSetWithHorizontalWall +
-                '}';
-    }
 }

@@ -7,8 +7,8 @@ public class Maze {
     private final int numberOfCols;
     private final int numberOfRows;
 
-    private List<Integer> horizontalWall;
-    private List<Integer> verticalWall;
+    private final List<Integer> horizontalWall;
+    private final List<Integer> verticalWall;
 
     public Maze(int numberOfRows, int numberOfCols) {
         this.numberOfCols = numberOfCols;

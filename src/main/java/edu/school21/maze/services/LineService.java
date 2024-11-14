@@ -4,7 +4,7 @@ import edu.school21.maze.model.LineOfSets;
 import java.util.List;
 
 public class LineService {
-    private LineOfSets lineOfSets;
+    private final LineOfSets lineOfSets;
 
     public LineService(int size) {
         this.lineOfSets = new LineOfSets(size);

@@ -16,7 +16,7 @@ public class WaveAlgorithm {
     private boolean isStep;
     private boolean waveLaunched;
     private final Solution solution;
-    private final CellWalker circularMotionImp = new CellWalker();
+    private final CellWalker circularMotion = new CellWalker();
 
     public WaveAlgorithm(Maze maze, Solution solution) {
         this.maze = maze;
@@ -62,7 +62,7 @@ public class WaveAlgorithm {
             for (int i = 0; i < 4; i++) {
                 int newX = cell.getX() + clockwiseWalk.get(i).getX();
                 int newY = cell.getY() + clockwiseWalk.get(i).getY();
-                if(circularMotionImp.getCircularMotions()[i].step(new Point(newX,newY),cell, mazeSolution, maze, waveLaunched)){
+                if(circularMotion.getCircularMotions()[i].step(new Point(newX,newY),cell, mazeSolution, maze, waveLaunched)){
                     mazeSolution.get(newY).set(newX, step);
                     wave.add(new Point(newX, newY));
                 }
@@ -79,7 +79,7 @@ public class WaveAlgorithm {
             for (int i = 0; i < 4 && isStep; i++) {
                 int newX = currentWave.getX() + clockwiseWalk.get(i).getX();
                 int newY = currentWave.getY() + clockwiseWalk.get(i).getY();
-                if(circularMotionImp.getCircularMotions()[i].step(new Point(newX,newY),currentWave, mazeSolution, maze, waveLaunched)){
+                if(circularMotion.getCircularMotions()[i].step(new Point(newX,newY),currentWave, mazeSolution, maze, waveLaunched)){
                     addSolutionCoordinates(currentWave, newX, newY);
                 }
             }

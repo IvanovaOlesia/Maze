@@ -52,6 +52,7 @@ public class MazeGenerator {
                 .boxed()
                 .toList();
     }
+
     private void assignSetsToArrayCells() {
         IntStream.range(0, maze.getNumberOfCols())
                 .filter(i -> lineService.getSetByIndex(i) == 0)

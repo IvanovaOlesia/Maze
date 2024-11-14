@@ -16,28 +16,38 @@ public class CellWalker {
     public CircularMotion[] getCircularMotions() {
         return circularMotions;
     }
+    /**
+     *
+     * The method checks whether it is possible to take a step to the left
+     *
+     * @param newPoint cell coordinates to the left
+     * @param currentPoint coordinates of the current cell
+     * @param mazeSolution two-dimensional maze solution array
+     * @param maze basic data of the maze
+     * @param waveLaunched flag indicating whether the wave is being launched
+     * @return is it possible to step left
+     */
+    private boolean stepLeft(Point newPoint, Point currentPoint, List<List<Integer>>mazeSolution, Maze maze, boolean waveLaunched){
+        return checkingValidValues(newPoint, currentPoint ,mazeSolution, maze, waveLaunched)  && (checkingForVerticalWall(newPoint.getY(), newPoint.getX(),maze));
+    }
+    private boolean stepDown(Point newPoint, Point currentPoint,List<List<Integer>>mazeSolution, Maze maze, boolean waveLaunched){
+        return  checkingValidValues(newPoint, currentPoint ,mazeSolution, maze, waveLaunched) && (checkingForHorizontalWall(currentPoint.getY(), currentPoint.getX(),maze));
+    }
+    private boolean stepRight(Point newPoint, Point currentPoint,List<List<Integer>>mazeSolution, Maze maze, boolean waveLaunched){
+        return checkingValidValues(newPoint, currentPoint ,mazeSolution, maze, waveLaunched) && (checkingForVerticalWall(currentPoint.getY(), currentPoint.getX(), maze));
+    }
+    private boolean stepUp(Point newPoint, Point currentPoint,List<List<Integer>>mazeSolution, Maze maze, boolean waveLaunched){
+        return checkingValidValues(newPoint, currentPoint ,mazeSolution, maze, waveLaunched) && (checkingForHorizontalWall(newPoint.getY(), newPoint.getX(),maze));
+    }
+    private boolean checkingValidValues(Point newPoint,Point currentPoint, List<List<Integer>>mazeSolution, Maze maze, boolean waveLaunched) {
+        return boundaryCheck(newPoint.getX(), newPoint.getY(), maze) && checkCorrectValue(newPoint,currentPoint ,mazeSolution,waveLaunched);
+    }
 
-    private boolean stepLeft(Point newPoint, Point oldPoint, List<List<Integer>>mazeSolution, Maze maze, boolean waveLaunched){
-        return checkingValidValues(newPoint, oldPoint ,mazeSolution, maze, waveLaunched)  && (checkingForVerticalWall(newPoint.getY(), newPoint.getX(),maze));
-    }
-    private boolean stepDown(Point newPoint, Point oldPoint,List<List<Integer>>mazeSolution, Maze maze, boolean waveLaunched){
-        return  checkingValidValues(newPoint, oldPoint ,mazeSolution, maze, waveLaunched) && (checkingForHorizontalWall(oldPoint.getY(), oldPoint.getX(),maze));
-    }
-    private boolean stepRight(Point newPoint, Point oldPoint,List<List<Integer>>mazeSolution, Maze maze, boolean waveLaunched){
-        return checkingValidValues(newPoint, oldPoint ,mazeSolution, maze, waveLaunched) && (checkingForVerticalWall(oldPoint.getY(), oldPoint.getX(), maze));
-    }
-    private boolean stepUp(Point newPoint, Point oldPoint,List<List<Integer>>mazeSolution, Maze maze, boolean waveLaunched){
-        return checkingValidValues(newPoint, oldPoint ,mazeSolution, maze, waveLaunched) && (checkingForHorizontalWall(newPoint.getY(), newPoint.getX(),maze));
-    }
-    private boolean checkingValidValues(Point newPoint,Point oldPoint, List<List<Integer>>mazeSolution, Maze maze, boolean waveLaunched) {
-        return boundaryCheck(newPoint.getX(), newPoint.getY(), maze) && checkCorrectValue(newPoint,oldPoint ,mazeSolution,waveLaunched);
-    }
-
-    private boolean checkCorrectValue(Point newPoint,Point oldPoint, List<List<Integer>> mazeSolution, boolean waveLaunched) {
+    private boolean checkCorrectValue(Point newPoint,Point currentPoint, List<List<Integer>> mazeSolution, boolean waveLaunched) {
         if (waveLaunched) {
             return (mazeSolution.get(newPoint.getY()).get(newPoint.getX()) == 0);
         }else{
-            return (mazeSolution.get(oldPoint.getY()).get(oldPoint.getX()) - 1 == mazeSolution.get(newPoint.getY()).get(newPoint.getX()));
+            return (mazeSolution.get(currentPoint.getY()).get(currentPoint.getX()) - 1 == mazeSolution.get(newPoint.getY()).get(newPoint.getX()));
         }
 
     }
