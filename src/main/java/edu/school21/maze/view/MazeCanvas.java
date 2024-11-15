@@ -65,7 +65,7 @@ public class MazeCanvas extends Canvas {
     public void drawSolution(Solution solution){
         gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         drawMaze(maze);
-        gc.setStroke(Color.GREEN);
+        gc.setStroke(Color.RED);
         gc.setLineWidth(2);
         for (int i = 0; i < solution.getSolutionArray().size() - 1; i++) {
             int startX = solution.getSolutionArray().get(i).getX();
@@ -77,24 +77,36 @@ public class MazeCanvas extends Canvas {
     }
 
     public void createUI(Spinner<Integer> rowsSpinner, Spinner<Integer> colsSpinner, Button generateButton, Stage stage){
+        settingSpinnerSizes(rowsSpinner,colsSpinner);
+        GridPane gridPane = placingElementsInGrid(rowsSpinner,colsSpinner);
+        Group root = placementOfTheCanvasWithRenderingAndControls(gridPane,generateButton);
+        scene = new Scene(root, 500 + 200, 500);
+        stage.setScene(scene);
+        stage.setTitle("MAZE");
+        stage.show();
+    }
+
+    private Group placementOfTheCanvasWithRenderingAndControls(GridPane gridPane, Button generateButton ) {
+        VBox vBox = new VBox(gridPane, generateButton);
+        vBox.setSpacing(20);
+        HBox hBox = new HBox(this, vBox);
+        hBox.setSpacing(20);
+        return new Group(hBox);
+    }
+
+
+    private void settingSpinnerSizes(Spinner<Integer> rowsSpinner, Spinner<Integer> colsSpinner) {
         rowsSpinner.setPrefWidth(75);
         rowsSpinner.setEditable(true);
         colsSpinner.setPrefWidth(75);
         colsSpinner.setEditable(true);
+    }
+    private GridPane placingElementsInGrid(Spinner<Integer> rowsSpinner, Spinner<Integer> colsSpinner) {
         GridPane gridPane = new GridPane();
         gridPane.add(new Label("Rows:  "), 0, 0);
         gridPane.add(rowsSpinner, 1, 0);
         gridPane.add(new Label("Cols: "), 0, 1);
         gridPane.add(colsSpinner, 1, 1);
-        VBox vBox = new VBox(gridPane, generateButton);
-        vBox.setSpacing(20);
-        HBox hBox = new HBox(this, vBox);
-        hBox.setSpacing(20);
-        Group root = new Group(hBox);
-
-        scene = new Scene(root, 500 + 200, 500);
-        stage.setScene(scene);
-        stage.setTitle("MAZE");
-        stage.show();
+        return gridPane;
     }
 }
