@@ -43,9 +43,6 @@ public class MazeAlgorithm {
         }
     }
 
-    /**
-     * The method generates a random number 0 or 1.
-     */
     public void generateRandomNumber() {
         decisionArray = IntStream.generate(() -> ThreadLocalRandom.current().nextInt(2))
                 .limit(maze.getNumberOfCols() * maze.getNumberOfRows() * 2L)

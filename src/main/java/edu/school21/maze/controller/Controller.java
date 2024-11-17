@@ -7,20 +7,22 @@ import edu.school21.maze.view.MazeCanvas;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 public class Controller {
-    private MazeCanvas mazeCanvas;
+    private final MazeCanvas mazeCanvas;
     private Scene scene;
     private Maze maze;
-    private  List<Point> coordinatesOfMouseClick;
-    private Spinner<Integer> rowsSpinner;
-    private Spinner<Integer> colsSpinner;
-    private Button generateButton;
+    private final List<Point> coordinatesOfMouseClick;
+    private final Spinner<Integer> rowsSpinner;
+    private final Spinner<Integer> colsSpinner;
+    private final Button generateButton;
 
     public Controller() {
         mazeCanvas = new MazeCanvas();
@@ -28,36 +30,38 @@ public class Controller {
         rowsSpinner  = new Spinner<>(2, 50, 2);
         colsSpinner = new Spinner<>(2, 50, 2);
         generateButton = new Button("GENERATE MAZE");
-
     }
-    /**
-     * The method starts the application. Places the user interface and waits for input
-     */
+
     public void startProgram(Stage stage) {
         mazeCanvas.createUI(rowsSpinner, colsSpinner, generateButton, stage);
         scene = mazeCanvas.getMazeScene();
+        UnaryOperator<TextFormatter.Change> filter = change -> {
+            String newText = change.getControlNewText();
+            if (newText.matches("\\d*")) {
+                return change;
+            }
+            return null;
+        };
+        rowsSpinner.getEditor().setTextFormatter(new TextFormatter<>(filter));
+        colsSpinner.getEditor().setTextFormatter(new TextFormatter<>(filter));
         buttonPress();
         mouseClick();
     }
-    /**
-     *  Event handler for pressing the maze generation button
-     */
     private void buttonPress(){
         generateButton.setOnAction(event -> {
-            maze = new Maze(rowsSpinner.getValue(),colsSpinner.getValue() );
-            MazeGenerator.generateMaze(mazeCanvas, maze);
+            int rows = rowsSpinner.getValue();
+            int cols = colsSpinner.getValue();
+                maze = new Maze(rows, cols);
+                MazeGenerator.generateMaze(mazeCanvas, maze);
         });
     }
-    /**
-     *  Mouse click event handler
-     */
     private void mouseClick(){
         scene.setOnMouseClicked(this::handleMouseClick);
     }
     private void handleMouseClick(MouseEvent event) {
         int x = (int)event.getSceneX();
         int y = (int)event.getSceneY();
-        if(checkForPermissibleRangeOfValues(x, y)) {
+        if(MazeGenerator.checkForPermissibleRangeOfValues(x, y, maze)) {
             coordinatesOfMouseClick.add(new Point(x, y));
             if (coordinatesOfMouseClick.size() == 2) {
                 MazeGenerator.generateSolution(mazeCanvas, maze,coordinatesOfMouseClick);
@@ -65,10 +69,5 @@ public class Controller {
             }
         }
     }
-    /**
-     *  Mouse click event handler
-     */
-    private boolean checkForPermissibleRangeOfValues(int x, int y) {
-        return (x < MazeCanvas.CANVAS_WIDTH) && (y < MazeCanvas.CANVAS_HEIGHT) && (maze != null);
-    }
+
 }

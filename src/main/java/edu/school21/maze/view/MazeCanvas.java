@@ -21,7 +21,7 @@ public class MazeCanvas extends Canvas {
     private int cellWidth;
     private int cellHeight;
     private Scene scene;
-    private GraphicsContext gc;
+    private final GraphicsContext gc;
     private Maze maze;
 
 
@@ -40,15 +40,23 @@ public class MazeCanvas extends Canvas {
     public MazeCanvas() {
         super(500, 500);
         gc = this.getGraphicsContext2D();
+        gc.setFill(Color.GRAY);
+        gc.fillRect(0, 0 , CANVAS_WIDTH, CANVAS_HEIGHT);
+        gc.setStroke(Color.BLACK);
+        gc.setLineWidth(3);
+        gc.strokeRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
     }
 
     public void drawMaze(Maze maze) {
         this.maze = maze;
         gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-
         cellWidth = CANVAS_WIDTH / maze.getNumberOfCols();
         cellHeight = CANVAS_HEIGHT / maze.getNumberOfRows();
-
+        gc.setFill(Color.GRAY);
+        gc.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        gc.setStroke(Color.BLACK);
+        gc.setLineWidth(3);
+        gc.strokeRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
         for (int i = 0; i < maze.getNumberOfRows(); i++) {
             for (int j = 0; j < maze.getNumberOfCols(); j++) {
                 gc.setFill(Color.BLACK);
@@ -83,6 +91,10 @@ public class MazeCanvas extends Canvas {
         scene = new Scene(root, 500 + 200, 500);
         stage.setScene(scene);
         stage.setTitle("MAZE");
+        stage.setMinWidth(700);
+        stage.setMinHeight(500);
+        stage.setMaxWidth(700);
+        stage.setMaxHeight(500);
         stage.show();
     }
 

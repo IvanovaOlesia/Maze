@@ -26,4 +26,9 @@ public class MazeGenerator {
         solution.convertingCellsToPixels(mazeCanvas.getCellHeight(), mazeCanvas.getCellWidth());
         mazeCanvas.drawSolution(solution);
     }
+    public static boolean checkForPermissibleRangeOfValues(int x, int y, Maze maze) {
+        return (x < MazeCanvas.CANVAS_WIDTH) && (y < MazeCanvas.CANVAS_HEIGHT) && (maze != null);
+    }
+
+
 }

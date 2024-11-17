@@ -97,13 +97,13 @@ public class WaveAlgorithm {
 
 
     private List<List<Integer>> initializeSolutionArray() {
-        List<List<Integer>> mazeSolution = new ArrayList<>();
+        List<List<Integer>> solutionArray = new ArrayList<>();
         for (int i = 0; i < maze.getNumberOfRows(); i++) {
-            mazeSolution.add(new ArrayList<>());
+            solutionArray.add(new ArrayList<>());
             for (int j = 0; j < maze.getNumberOfCols(); j++) {
-                mazeSolution.get(i).add(0);
+                solutionArray.get(i).add(0);
             }
         }
-        return mazeSolution;
+        return solutionArray;
     }
 }

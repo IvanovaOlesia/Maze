@@ -16,17 +16,7 @@ public class CellWalker {
     public CircularMotion[] getCircularMotions() {
         return circularMotions;
     }
-    /**
-     *
-     * The method checks whether it is possible to take a step to the left
-     *
-     * @param newPoint cell coordinates to the left
-     * @param currentPoint coordinates of the current cell
-     * @param mazeSolution two-dimensional maze solution array
-     * @param maze basic data of the maze
-     * @param waveLaunched flag indicating whether the wave is being launched
-     * @return is it possible to step left
-     */
+
     private boolean stepLeft(Point newPoint, Point currentPoint, List<List<Integer>>mazeSolution, Maze maze, boolean waveLaunched){
         return checkingValidValues(newPoint, currentPoint ,mazeSolution, maze, waveLaunched)  && (checkingForVerticalWall(newPoint.getY(), newPoint.getX(),maze));
     }
@@ -49,7 +39,6 @@ public class CellWalker {
         }else{
             return (mazeSolution.get(currentPoint.getY()).get(currentPoint.getX()) - 1 == mazeSolution.get(newPoint.getY()).get(newPoint.getX()));
         }
-
     }
 
     private boolean boundaryCheck(int newX, int newY, Maze maze) {

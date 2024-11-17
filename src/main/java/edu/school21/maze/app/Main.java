@@ -1,9 +1,3 @@
-/** MazeSimulator project
- *
- * Copyright (C) Maze Project Developers. All Rights Reserved
- *
- */
-
 package edu.school21.maze.app;
 
 import edu.school21.maze.controller.Controller;
