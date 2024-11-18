@@ -30,24 +30,24 @@ public class Solution {
         this.solutionArray.add(step);
     }
 
-    public void convertingPixelsToCells(int cellHeight, int cellWidth){
+    public void convertingPixelsToCells(double cellHeight, double cellWidth){
         getCell(start, cellHeight, cellWidth);
         getCell(finish, cellHeight, cellWidth);
     }
 
-    private void getCell(Point point, int cellHeight, int cellWidth) {
-        int cellX = point.getX() / cellWidth;
-        int cellY  = point.getY() / cellHeight;
-        point.setX(cellX);
-        point.setY(cellY);
+    private void getCell(Point point, double cellHeight, double cellWidth) {
+        double cellX = point.getX() / cellWidth;
+        double cellY  = point.getY() / cellHeight;
+        point.setX((int)cellX);
+        point.setY((int)cellY);
     }
 
-    public void convertingCellsToPixels(int cellHeight, int cellWidth){
+    public void convertingCellsToPixels(double cellHeight, double cellWidth){
         for (var step: solutionArray) {
-            int cellX = step.getX() * cellWidth + cellWidth / 2;
-            int cellY = step.getY() * cellHeight + cellHeight / 2;
-            step.setX(cellX);
-            step.setY(cellY);
+            double cellX = step.getX() * cellWidth + cellWidth / 2.00;
+            double cellY = step.getY() * cellHeight + cellHeight / 2.00;
+            step.setX((int)cellX);
+            step.setY((int)cellY);
         }
     }
 }

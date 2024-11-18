@@ -16,10 +16,14 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class MazeCanvas extends Canvas {
-    public static final int CANVAS_WIDTH = 500;
-    public static final int CANVAS_HEIGHT = 500;
-    private int cellWidth;
-    private int cellHeight;
+    public static final double CANVAS_WIDTH = 500;
+    public static final double CANVAS_HEIGHT = 500;
+    public final double WINDOW_WIDTH = 700;
+    public final double WINDOW_HEIGHT = 500;
+    public final double LINE_WIDTH = 2;
+    public final double BORDER_WIDTH = 4;
+    private double cellWidth;
+    private double cellHeight;
     private Scene scene;
     private final GraphicsContext gc;
     private Maze maze;
@@ -29,21 +33,26 @@ public class MazeCanvas extends Canvas {
         return scene;
     }
 
-    public int getCellWidth() {
+    public double getCellWidth() {
         return cellWidth;
     }
 
-    public int getCellHeight() {
+    public double getCellHeight() {
         return cellHeight;
     }
 
     public MazeCanvas() {
-        super(500, 500);
+        super(CANVAS_WIDTH, CANVAS_HEIGHT);
         gc = this.getGraphicsContext2D();
+        settingBordersAndColors();
+
+    }
+
+    private void settingBordersAndColors() {
         gc.setFill(Color.GRAY);
         gc.fillRect(0, 0 , CANVAS_WIDTH, CANVAS_HEIGHT);
         gc.setStroke(Color.BLACK);
-        gc.setLineWidth(3);
+        gc.setLineWidth(BORDER_WIDTH);
         gc.strokeRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
     }
 
@@ -52,19 +61,15 @@ public class MazeCanvas extends Canvas {
         gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         cellWidth = CANVAS_WIDTH / maze.getNumberOfCols();
         cellHeight = CANVAS_HEIGHT / maze.getNumberOfRows();
-        gc.setFill(Color.GRAY);
-        gc.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-        gc.setStroke(Color.BLACK);
-        gc.setLineWidth(3);
-        gc.strokeRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+        settingBordersAndColors();
         for (int i = 0; i < maze.getNumberOfRows(); i++) {
             for (int j = 0; j < maze.getNumberOfCols(); j++) {
                 gc.setFill(Color.BLACK);
                 if (maze.getVerticalWall().get(i * maze.getNumberOfCols() + j) == 1) {
-                    gc.fillRect((j + 1) * cellWidth - 2, i * cellHeight, 2, cellHeight);
+                    gc.fillRect((j + 1.00) * cellWidth - LINE_WIDTH, i * cellHeight, LINE_WIDTH, cellHeight);
                 }
                 if (maze.getHorizontalWall().get(i * maze.getNumberOfCols() + j) == 1) {
-                    gc.fillRect(j * cellWidth, (i + 1) * cellHeight - 2, cellWidth, 2);
+                    gc.fillRect(j * cellWidth, (i + 1.00) * cellHeight - LINE_WIDTH, cellWidth, LINE_WIDTH);
                 }
             }
         }
@@ -74,7 +79,7 @@ public class MazeCanvas extends Canvas {
         gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         drawMaze(maze);
         gc.setStroke(Color.RED);
-        gc.setLineWidth(2);
+        gc.setLineWidth(LINE_WIDTH);
         for (int i = 0; i < solution.getSolutionArray().size() - 1; i++) {
             int startX = solution.getSolutionArray().get(i).getX();
             int startY = solution.getSolutionArray().get(i).getY();
@@ -88,13 +93,10 @@ public class MazeCanvas extends Canvas {
         settingSpinnerSizes(rowsSpinner,colsSpinner);
         GridPane gridPane = placingElementsInGrid(rowsSpinner,colsSpinner);
         Group root = placementOfTheCanvasWithRenderingAndControls(gridPane,generateButton);
-        scene = new Scene(root, 500 + 200, 500);
+        scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
         stage.setScene(scene);
         stage.setTitle("MAZE");
-        stage.setMinWidth(700);
-        stage.setMinHeight(500);
-        stage.setMaxWidth(700);
-        stage.setMaxHeight(500);
+        stage.setResizable(false);
         stage.show();
     }
 
